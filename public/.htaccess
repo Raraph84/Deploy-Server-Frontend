@@ -5,5 +5,5 @@ RewriteRule ^ index.html [QSA,L]
 
 AuthName "Connexion"
 AuthType Basic
-AuthUserFile "/home/hebergs/websites/Hebergs/.htpasswd"
+AuthUserFile "/home/hebergs/websites/Hebergs-Logs-Website/.htpasswd"
 Require valid-user

@@ -18,7 +18,7 @@ class Website extends React.Component {
 
     connect() {
 
-        this.ws = new WebSocket("wss://gateway.hebergs.primordium.fr");
+        this.ws = new WebSocket("wss://gateway.raraph.fr/hebergs");
 
         this.ws.addEventListener("open", () => {
 

@@ -46,7 +46,7 @@ class Website extends React.Component {
 
             } else if (message.event === "LOG") {
 
-                this.state.hebergs.find((heberg) => heberg.id === message.serverId).logs.push(message.line);
+                this.state.hebergs.find((heberg) => heberg.id === message.serverId).logs.push(...message.logs);
                 this.setState({ hebergs: this.state.hebergs });
             }
         });

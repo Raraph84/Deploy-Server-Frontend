@@ -24,7 +24,7 @@ class Website extends React.Component {
 
             this.ws.send(JSON.stringify({
                 command: "LOGIN",
-                token: "59Ykw7UwHDSlcEUSwgnezTgvuii0QMQUDe3HGG5A"
+                token: "59Ykw7UwHDSlcEUSwgnezTgvuii0QMNGx6GsMMkCGybgoDpL42"
             }));
         });
 

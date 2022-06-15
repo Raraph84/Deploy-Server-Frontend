@@ -1,16 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import { Component, createRef } from "react";
+import { createRoot } from "react-dom/client";
 
 import "./style.scss";
 
-class Website extends React.Component {
+class Website extends Component {
 
     constructor(props) {
 
         super(props);
 
-        this.textArea = React.createRef();
-
+        this.textArea = createRef();
         this.ws = null;
 
         this.state = { hebergs: [], currentHeberg: -1 };
@@ -39,9 +38,7 @@ class Website extends React.Component {
 
             if (message.event === "SERVER") {
 
-                const heberg = { id: message.id, name: message.name, logs: [] };
-
-                this.state.hebergs.push(heberg);
+                this.state.hebergs.push({ id: message.id, name: message.name, logs: [] });
                 this.setState({ hebergs: this.state.hebergs });
 
             } else if (message.event === "LOG") {
@@ -54,9 +51,8 @@ class Website extends React.Component {
         this.ws.addEventListener("close", () => {
 
             this.setState({ hebergs: [], currentHeberg: -1 });
-            this.ws = null;
 
-            setTimeout(() => this.connect(), 5000);
+            setTimeout(() => this.connect(), 1000);
         });
     }
 
@@ -72,9 +68,12 @@ class Website extends React.Component {
 
         document.title = "Logs hébergements";
 
-        return <div className="App">
+        return <div className="website">
 
-            <div className="menu">{this.state.hebergs.map((heberg) => <button key={heberg.id} style={{ backgroundColor: this.state.currentHeberg === heberg.id ? "rgb(50, 50, 50)" : "" }} onClick={() => this.setState({ currentHeberg: heberg.id })}>{heberg.name}</button>)}</div>
+            <div className="menu">{this.state.hebergs.map((heberg) => <button key={heberg.id}
+                style={{ backgroundColor: this.state.currentHeberg === heberg.id ? "rgb(50, 50, 50)" : "" }}
+                onClick={() => this.setState({ currentHeberg: heberg.id })}
+            >{heberg.name}</button>)}</div>
 
             <textarea readOnly ref={this.textArea} value={this.state.currentHeberg === -1 ? "" : this.state.hebergs.find((heberg) => this.state.currentHeberg === heberg.id).logs.join("\n")} />
 
@@ -82,4 +81,4 @@ class Website extends React.Component {
     }
 }
 
-ReactDOM.render(<React.StrictMode><Website /></React.StrictMode>, document.getElementById("root"));
+createRoot(document.getElementById("root")).render(<Website />);

@@ -1,44 +1,40 @@
-html,
-body,
-#root,
-.App {
-    height: 100%;
-}
-
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
 }
 
-.App {
+.website {
     display: grid;
     grid-template-rows: max-content auto;
-}
+    height: 100vh;
 
-.menu {
-    display: flex;
-    justify-content: center;
-    background-color: rgb(40, 40, 40);
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 20px;
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        padding: 20px;
+        background-color: rgb(40, 40, 40);
 
-    button {
-        padding: 10px;
-        background-color: rgb(90, 90, 90);
-        color: white;
-        font-size: 15px;
-        border-width: 0;
-        border-radius: 10px;
-        cursor: pointer;
+        button {
+            padding: 10px;
+            background-color: rgb(90, 90, 90);
+            color: white;
+            font-size: 15px;
+            border-width: 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
     }
-}
 
-textarea {
-    margin: 0;
-    resize: none;
-    background-color: rgb(50, 50, 50);
-    color: white;
-    padding: 5px;
-    outline: none;
-    border-width: 0;
+    textarea {
+        padding: 5px;
+        background-color: rgb(50, 50, 50);
+        color: white;
+        font-size: 13px;
+        border-width: 0;
+        outline: none;
+        resize: none;
+    }
 }

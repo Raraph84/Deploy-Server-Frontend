@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Component, createRef } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -75,7 +76,11 @@ class Website extends Component {
                 onClick={() => this.setState({ currentHeberg: heberg.id })}
             >{heberg.name}</button>)}</div>
 
-            <textarea readOnly ref={this.textArea} value={this.state.currentHeberg === -1 ? "" : this.state.hebergs.find((heberg) => this.state.currentHeberg === heberg.id).logs.join("\n")} />
+            <textarea readOnly ref={this.textArea} value={this.state.currentHeberg === -1 ? "" : this.state.hebergs
+                .find((heberg) => this.state.currentHeberg === heberg.id).logs
+                .sort((a, b) => a.date - b.date)
+                .map((log) => moment(log.date).format("[[]DD/MM/YYYY HH:mm[]] ") + log.line)
+                .join("\n")} />
 
         </div>;
     }

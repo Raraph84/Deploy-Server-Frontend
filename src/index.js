@@ -46,6 +46,10 @@ class Website extends Component {
 
                 this.state.hebergs.find((heberg) => heberg.id === message.serverId).logs.push(...message.logs);
                 this.setState({ hebergs: this.state.hebergs });
+
+            } else if (message.event === "HEARTBEAT") {
+
+                this.ws.send(JSON.stringify({ command: "HEARTBEAT" }));
             }
         });
 

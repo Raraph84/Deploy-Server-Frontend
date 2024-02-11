@@ -1,6 +1,6 @@
-import moment from "moment";
 import { Component, createRef } from "react";
 import { createRoot } from "react-dom/client";
+import moment from "moment";
 
 import "./style.scss";
 
@@ -10,21 +10,22 @@ class Website extends Component {
 
         super(props);
 
-        this.textArea = createRef();
+        this.logsTextAreaRef = createRef();
+
         this.ws = null;
 
-        this.state = { hebergs: [], currentHeberg: -1 };
+        this.state = { hebergs: [], currentHeberg: null };
     }
 
     connect() {
 
-        this.ws = new WebSocket("wss://gateway.raraph.fr/hebergs");
+        this.ws = new WebSocket(process.env.REACT_APP_SERVER_HOST);
 
         this.ws.addEventListener("open", () => {
 
             this.ws.send(JSON.stringify({
                 command: "LOGIN",
-                token: "59Ykw7UwHDSlcEUSwgnezTgvuii0QMNGx6GsMMkCGybgoDpL42"
+                token: process.env.REACT_APP_TOKEN
             }));
         });
 
@@ -55,7 +56,7 @@ class Website extends Component {
 
         this.ws.addEventListener("close", () => {
 
-            this.setState({ hebergs: [], currentHeberg: -1 });
+            this.setState({ hebergs: [], currentHeberg: null });
 
             setTimeout(() => this.connect(), 1000);
         });
@@ -66,25 +67,22 @@ class Website extends Component {
     }
 
     componentDidUpdate() {
-        this.textArea.current.scrollTop = this.textArea.current.scrollHeight;
+        this.logsTextAreaRef.current.scrollTop = this.logsTextAreaRef.current.scrollHeight;
     }
 
     render() {
-
-        document.title = "Logs hébergements";
-
         return <div className="website">
 
-            <div className="menu">{this.state.hebergs.map((heberg) => <button key={heberg.id}
-                style={{ backgroundColor: this.state.currentHeberg === heberg.id ? "rgb(50, 50, 50)" : "" }}
-                onClick={() => this.setState({ currentHeberg: heberg.id })}
-            >{heberg.name}</button>)}</div>
+            <div className="menu">
+                {this.state.hebergs.map((heberg) => <button key={heberg.id} className={this.state.currentHeberg !== heberg.id ? "" : "active"}
+                    onClick={() => this.setState({ currentHeberg: heberg.id })}>{heberg.name}</button>)}
+            </div>
 
-            <textarea readOnly ref={this.textArea} value={this.state.currentHeberg === -1 ? "" : this.state.hebergs
+            <textarea ref={this.logsTextAreaRef} readOnly value={this.state.currentHeberg !== null ? this.state.hebergs
                 .find((heberg) => this.state.currentHeberg === heberg.id).logs
                 .sort((a, b) => a.date - b.date)
                 .map((log) => moment(log.date).format("[[]DD/MM/YYYY HH:mm:ss[]] ") + log.line)
-                .join("\n")} />
+                .join("\n") : null} />
 
         </div>;
     }

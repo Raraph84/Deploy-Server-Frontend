@@ -46,7 +46,7 @@ class Website extends Component {
             } else if (message.event === "LOG") {
 
                 this.state.hebergs.find((heberg) => heberg.id === message.serverId).logs.push(...message.logs);
-                this.setState({ hebergs: this.state.hebergs });
+                this.setState({ hebergs: this.state.hebergs }, () => { if (message.serverId === this.state.currentHeberg) this.updateScroll(); });
 
             } else if (message.event === "HEARTBEAT") {
 
@@ -66,8 +66,8 @@ class Website extends Component {
         this.connect();
     }
 
-    componentDidUpdate() {
-        this.logsTextAreaRef.current.scrollTop = this.logsTextAreaRef.current.scrollHeight;
+    updateScroll() {
+        if (this.logsTextAreaRef.current) this.logsTextAreaRef.current.scrollTop = this.logsTextAreaRef.current.scrollHeight;
     }
 
     render() {
@@ -75,7 +75,7 @@ class Website extends Component {
 
             <div className="menu">
                 {this.state.hebergs.map((heberg) => <button key={heberg.id} className={this.state.currentHeberg !== heberg.id ? "" : "active"}
-                    onClick={() => this.setState({ currentHeberg: heberg.id })}>{heberg.name}</button>)}
+                    onClick={() => this.setState({ currentHeberg: heberg.id }, () => this.updateScroll())}>{heberg.name}</button>)}
             </div>
 
             <textarea ref={this.logsTextAreaRef} readOnly value={this.state.currentHeberg !== null ? this.state.hebergs

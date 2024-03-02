@@ -58,5 +58,7 @@ textarea {
         resize: none;
         background-color: black;
         font-size: 13px;
+        overflow: auto;
+        white-space: pre;
     }
 }

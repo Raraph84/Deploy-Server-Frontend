@@ -1,7 +1,8 @@
 {
   "name": "deploy-server-frontend",
   "version": "0.1.0",
-  "private": true,
+  "author": "Raraph84",
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

@@ -40,7 +40,12 @@ class Website extends Component {
 
             if (message.event === "SERVER") {
 
-                this.state.hebergs.push({ id: message.id, name: message.name, logs: [] });
+                this.state.hebergs.push({ id: message.id, name: message.name, type: message.type, state: message.state, logs: [] });
+                this.setState({ hebergs: this.state.hebergs });
+
+            } else if (message.event === "SERVER_STATE") {
+
+                this.state.hebergs.find((heberg) => heberg.id === message.serverId).state = message.state;
                 this.setState({ hebergs: this.state.hebergs });
 
             } else if (message.event === "LOG") {
@@ -71,18 +76,36 @@ class Website extends Component {
     }
 
     render() {
+
+        const currentServer = this.state.hebergs.find((heberg) => this.state.currentHeberg === heberg.id);
+
         return <div className="website">
 
-            <div className="menu">
+            <div className="servers">
                 {this.state.hebergs.map((heberg) => <button key={heberg.id} className={this.state.currentHeberg !== heberg.id ? "" : "active"}
                     onClick={() => this.setState({ currentHeberg: heberg.id }, () => this.updateScroll())}>{heberg.name}</button>)}
             </div>
 
-            <textarea ref={this.logsTextAreaRef} readOnly value={this.state.currentHeberg !== null ? this.state.hebergs
-                .find((heberg) => this.state.currentHeberg === heberg.id).logs
-                .sort((a, b) => a.date - b.date)
-                .map((log) => moment(log.date).format("[[]DD/MM/YYYY HH:mm:ss[]] ") + log.line)
-                .join("\n") : null} />
+            <div className="logs-menu">
+
+                <textarea ref={this.logsTextAreaRef} readOnly value={currentServer?.logs
+                    .sort((a, b) => a.date - b.date)
+                    .map((log) => moment(log.date).format("[[]DD/MM/YYYY HH:mm:ss[]] ") + log.line)
+                    .join("\n") || ""} />
+
+                {currentServer ? <div className="menu">
+                    <div>Statut : {{ stopped: "Arrêté", stopping: "Arrêt...", starting: "Démarrage...", started: "Démarré", restarting: "Redémarrage...", deploying: "Déploiement..." }[currentServer.state]}</div>
+                    <button disabled={!["started", "stopped"].includes(currentServer.state)}
+                        onClick={() => this.ws.send(JSON.stringify({ command: currentServer.state === "started" ? "STOP_SERVER" : "START_SERVER", serverId: currentServer.id }))}
+                    >{currentServer.state === "started" ? "Arrêter" : "Démarrer"}</button>
+                    <button disabled={!["started"].includes(currentServer.state)}
+                        onClick={() => this.ws.send(JSON.stringify({ command: "RESTART_SERVER", serverId: currentServer.id }))}
+                    >Redémarrer</button>
+                    <button disabled={!["started", "stopped"].includes(currentServer.state)}
+                        onClick={() => this.ws.send(JSON.stringify({ command: "DEPLOY_SERVER", serverId: currentServer.id }))}
+                    >Déployer</button>
+                </div> : null}
+            </div>
 
         </div>;
     }

@@ -14,9 +14,9 @@ body {
 
 button {
     color: inherit;
-    font-family: inherit;
-    font-weight: inherit;
+    font: inherit;
     border-width: 0;
+    background-color: transparent;
     cursor: pointer;
 }
 
@@ -28,11 +28,17 @@ textarea {
 
 .website {
     height: 100vh;
-    display: grid;
-    grid-template-rows: max-content auto;
+    display: flex;
+    flex-direction: column;
     background-color: #152A38;
+    font-size: 16px;
 
-    .menu {
+    button {
+        background-color: #29435C;
+        border-radius: 10px;
+    }
+
+    .servers {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
@@ -43,9 +49,6 @@ textarea {
 
         button {
             padding: 10px 15px;
-            background-color: #29435C;
-            font-size: 15px;
-            border-radius: 10px;
 
             &.active {
                 background-color: #1F374A;
@@ -53,12 +56,54 @@ textarea {
         }
     }
 
+    .logs-menu {
+        flex-grow: 1;
+        display: flex;
+    }
+
     textarea {
+        width: 100%;
         padding: 5px;
         resize: none;
         background-color: black;
         font-size: 13px;
         overflow: auto;
         white-space: pre;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 5px 15px;
+        text-align: center;
+
+        button {
+            padding: 10px 35px;
+
+            &:disabled {
+                background-color: #1F374A;
+            }
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .servers {
+            max-height: 15vh;
+        }
+
+        .logs-menu {
+            flex-direction: column-reverse;
+        }
+
+        .menu {
+            padding: 10px 15px;
+            max-height: 15vh;
+            overflow-y: auto;
+        }
+
+        textarea {
+            flex-grow: 1;
+        }
     }
 }

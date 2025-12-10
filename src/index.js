@@ -94,13 +94,15 @@ class Website extends Component {
                     .join("\n") || ""} />
 
                 {currentServer ? <div className="menu">
-                    <div>Statut : {{ stopped: "Arrêté", stopping: "Arrêt...", starting: "Démarrage...", started: "Démarré", restarting: "Redémarrage...", deploying: "Déploiement..." }[currentServer.state]}</div>
-                    <button disabled={!["started", "stopped"].includes(currentServer.state)}
-                        onClick={() => this.ws.send(JSON.stringify({ command: currentServer.state === "started" ? "STOP_SERVER" : "START_SERVER", serverId: currentServer.id }))}
-                    >{currentServer.state === "started" ? "Arrêter" : "Démarrer"}</button>
-                    <button disabled={!["started"].includes(currentServer.state)}
-                        onClick={() => this.ws.send(JSON.stringify({ command: "RESTART_SERVER", serverId: currentServer.id }))}
-                    >Redémarrer</button>
+                    {currentServer.type != "reactjs" && <>
+                        <div>Statut : {{ stopped: "Arrêté", stopping: "Arrêt...", starting: "Démarrage...", started: "Démarré", restarting: "Redémarrage...", deploying: "Déploiement..." }[currentServer.state]}</div>
+                        <button disabled={!["started", "stopped"].includes(currentServer.state)}
+                            onClick={() => this.ws.send(JSON.stringify({ command: currentServer.state === "started" ? "STOP_SERVER" : "START_SERVER", serverId: currentServer.id }))}
+                        >{currentServer.state === "started" ? "Arrêter" : "Démarrer"}</button>
+                        <button disabled={!["started"].includes(currentServer.state)}
+                            onClick={() => this.ws.send(JSON.stringify({ command: "RESTART_SERVER", serverId: currentServer.id }))}
+                        >Redémarrer</button>
+                    </>}
                     <button disabled={!["started", "stopped"].includes(currentServer.state)}
                         onClick={() => this.ws.send(JSON.stringify({ command: "DEPLOY_SERVER", serverId: currentServer.id }))}
                     >Déployer</button>

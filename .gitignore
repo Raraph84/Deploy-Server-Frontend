@@ -1,6 +1,3 @@
 node_modules/
-package-lock.json
-.env.local
-deploy.bat
 .env
 .env.local
